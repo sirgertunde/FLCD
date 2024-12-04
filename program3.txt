@@ -1,0 +1,14 @@
+int main()
+begin
+	int a = input("a= ");
+	int b = input("b= ");
+	int c = input("c= ");
+	if a <= b and a <= c then
+		print(a);
+	fi
+	if b <= a and b <= c then
+		print(b);
+	fi
+	print(c);
+	return 0;
+end

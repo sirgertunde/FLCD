@@ -1,0 +1,8 @@
+N = S B C
+sigma = a_b_c
+S = S
+P =
+    S -> abC
+    S -> aB
+    B -> bC
+    C -> c

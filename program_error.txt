@@ -1,0 +1,18 @@
+int main()
+begin
+	int n, 1d;
+	boolean prime = true;
+	n = input("Enter a number: ");
+	for 1d in range(2, sqrt(n) + 1) do
+		if n @ 1d == 0 then
+			prime = false;
+
+		fi
+	done
+	if prime == true then
+		print("prime");
+	else
+		print("not prime");
+	fi
+	return 0;
+end

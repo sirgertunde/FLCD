@@ -1,0 +1,48 @@
+N = program decllist declaration type arraydecl stmtlist stmt simplstmt assignstmt expression term factor iostmt structstmt ifstmt whilestmt forstmt condition relation
+sigma = int_main()_begin_;_return_end_IDENTIFIER_boolean_char_string_NUMBER_STRING_[_]_=_+_-_//_/_%_*_(_)_input_print_if_then_else_fi_while_do_done_for_in range_,_<_<=_=_<>_>=_>_and_or
+S = program
+P =
+    program -> int main() begin decllist ; stmtlist return 0 ; end
+    decllist -> declaration
+    decllist -> declaration ; decllist
+    declaration -> type IDENTIFIER ;
+    declaration -> arraydecl
+    type -> int
+    type -> boolean
+    type -> string
+    type -> char
+    arraydecl -> int IDENTIFIER [ NUMBER ] ;
+    stmtlist -> stmt
+    stmtlist -> stmt ; stmtlist
+    stmt -> simplstmt
+    stmt -> structstmt
+    simplstmt -> assignstmt
+    simplstmt -> iostmt
+    assignstmt -> IDENTIFIER = expression
+    expression -> expression + term
+    expression -> term
+    term -> term * factor
+    term -> factor
+    factor -> ( expression )
+    factor -> IDENTIFIER
+    iostmt ::= input ( STRING )
+    iostmt -> print ( IDENTIFIER )
+    iostmt -> print ( STRING )
+    structstmt -> cmpdstmt
+    structstmt -> ifstmt
+    structstmt -> whilestmt
+    structstmt -> forstsmt
+    ifstmt -> if condition then stmtlist
+    ifstmt -> if condition then stmtlist else stmtlist fi
+    whilestmt -> while condition do stmtlist done
+    forstmt -> for IDENTIFIER in range ( expression ) do stmtlist done
+    forstmt -> for IDENTIFIER in range ( expression , expression ) do stmtlist done
+    condition -> expression relation expression
+    relation -> <
+    relation -> <=
+    relation -> ==
+    relation -> <>
+    relation -> >=
+    relation -> >
+    relation -> and
+    relation -> or
