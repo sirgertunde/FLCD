@@ -1,3 +1,8 @@
+package src;
+
+import src.HashNode;
+import src.MyPair;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
