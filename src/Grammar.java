@@ -70,8 +70,16 @@ public class Grammar {
         }
     }
 
-    public List<String> getProductionsForNonTerminal(String nonTerminal){
-        return p.get(nonTerminal);
+    public List<List<String>> getProductionsForNonTerminal(String nonTerminal){
+        List<List<String>> productions = new ArrayList<>();
+        int i = 0;
+        for(String production: p.get(nonTerminal)){
+            productions.add(new ArrayList<>());
+            String[] symbols = production.split(" ");
+            productions.get(i).addAll(Arrays.asList(symbols));
+            i++;
+        }
+        return productions;
     }
 
     public boolean checkContextFreeGrammar(){
@@ -84,7 +92,7 @@ public class Grammar {
     }
 
     public static void main(String[] args){
-        Grammar grammar = new Grammar("g1.txt");
+        Grammar grammar = new Grammar("g2.txt");
         System.out.println("Set of non-terminals: " + grammar.getN());
         System.out.println("Set of terminals: " + grammar.getSigma());
         System.out.println("Starting symbol: " + grammar.getS());

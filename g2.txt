@@ -19,13 +19,13 @@ P =
     simplstmt -> assignstmt
     simplstmt -> iostmt
     assignstmt -> IDENTIFIER = expression
-    expression -> expression + term
     expression -> term
-    term -> term * factor
+    expression -> term + expression
     term -> factor
+    term -> factor * term
     factor -> ( expression )
     factor -> IDENTIFIER
-    iostmt ::= input ( STRING )
+    iostmt -> input ( STRING )
     iostmt -> print ( IDENTIFIER )
     iostmt -> print ( STRING )
     structstmt -> cmpdstmt

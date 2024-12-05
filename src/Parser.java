@@ -20,9 +20,9 @@ public class Parser {
         for (String nonTerminal : grammar.getN()) {
             tableFirst.put(nonTerminal, new ArrayList<>());
             tableFirst.get(nonTerminal).add(new HashSet<>());
-            List<String> productionsForNonTerminal = grammar.getProductionsForNonTerminal(nonTerminal);
-            for (String production : productionsForNonTerminal) {
-                String firstSymbolInProduction = String.valueOf(production.charAt(0));
+            List<List<String>> productionsForNonTerminal = grammar.getProductionsForNonTerminal(nonTerminal);
+            for (List<String> production : productionsForNonTerminal) {
+                String firstSymbolInProduction = production.getFirst();
                 if (grammar.getSigma().contains(firstSymbolInProduction)) {
                     tableFirst.get(nonTerminal).getFirst().add(firstSymbolInProduction);
                 }
@@ -36,16 +36,15 @@ public class Parser {
             continuing = false;
             for (String nonTerminal : grammar.getN()) {
                 tableFirst.get(nonTerminal).add(new HashSet<>());
-                List<String> productionsForNonTerminal = grammar.getProductionsForNonTerminal(nonTerminal);
+                List<List<String>> productionsForNonTerminal = grammar.getProductionsForNonTerminal(nonTerminal);
                 boolean isEmpty = false;
-                for (String production : productionsForNonTerminal) {
-                    String firstSymbolFromProduction = String.valueOf(production.charAt(0));
+                for (List<String> production : productionsForNonTerminal) {
+                    String firstSymbolFromProduction = production.getFirst();
                     if(grammar.getSigma().contains(firstSymbolFromProduction) && !tableFirst.get(nonTerminal).get(i).contains(firstSymbolFromProduction)){
                         tableFirst.get(nonTerminal).get(i).add(firstSymbolFromProduction);
                     }
                     else {
-                        for (int j = 0; j < production.length(); j++) {
-                            String symbol = String.valueOf(production.charAt(j));
+                        for (String symbol : production) {
                             if (grammar.getN().contains(symbol) && tableFirst.get(symbol).get(i - 1).isEmpty()) {
                                 isEmpty = true;
                             }
@@ -53,7 +52,7 @@ public class Parser {
                                 break;
                             }
                         }
-                        String firstSymbol = String.valueOf(production.charAt(0));
+                        String firstSymbol = production.getFirst();
                         if (!isEmpty) {
                             for (String s : tableFirst.get(nonTerminal).get(i - 1)) {
                                 tableFirst.get(nonTerminal).get(i).add(s);
@@ -88,7 +87,7 @@ public class Parser {
     }
 
     public static void main(String[] args){
-        Grammar grammar = new Grammar("g1.txt");
+        Grammar grammar = new Grammar("g2.txt");
         Parser parser = new Parser(grammar);
         System.out.println(parser.getFirst());
     }
