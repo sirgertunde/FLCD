@@ -6,32 +6,32 @@ import java.io.IOException;
 import java.util.*;
 
 public class Grammar {
-    private final Set<String> n;
-    private final Set<String> sigma;
-    private String s;
-    private final Map<String, List<String>> p;
+    private final Set<String> nonTerminals; // NonTerminals
+    private final Set<String> terminals; // Terminals
+    private String startingSymbol; // Starting symbol
+    private final Map<String, List<String>> productions; // Productions
 
     public Grammar(String fileName) {
-        n = new HashSet<>();
-        p = new HashMap<>();
-        sigma = new HashSet<>();
+        nonTerminals = new HashSet<>();
+        productions = new HashMap<>();
+        terminals = new HashSet<>();
         readFile(fileName);
     }
 
-    public Set<String> getN() {
-        return n;
+    public Set<String> getNonTerminals() {
+        return nonTerminals;
     }
 
-    public Set<String> getSigma() {
-        return sigma;
+    public Set<String> getTerminals() {
+        return terminals;
     }
 
-    public String getS() {
-        return s;
+    public String getStartingSymbol() {
+        return startingSymbol;
     }
 
-    public Map<String, List<String>> getP() {
-        return p;
+    public Map<String, List<String>> getProductions() {
+        return productions;
     }
 
     public void readFile(String fileName){
@@ -41,12 +41,12 @@ public class Grammar {
                 line = line.trim();
                 if (line.startsWith("N =")) {
                     String[] nonterminals = line.substring(3).trim().split("\\s+");
-                    n.addAll(Arrays.asList(nonterminals));
+                    nonTerminals.addAll(Arrays.asList(nonterminals));
                 } else if (line.startsWith("sigma =")) {
                     String[] terminals = line.substring(8).split("_");
-                    sigma.addAll(Arrays.asList(terminals));
+                    this.terminals.addAll(Arrays.asList(terminals));
                 } else if (line.startsWith("S =")) {
-                    s = line.substring(3).trim();
+                    startingSymbol = line.substring(3).trim();
                 } else if (line.startsWith("P =")) {
                     while ((line = reader.readLine()) != null) {
                         line = line.trim();
@@ -55,12 +55,12 @@ public class Grammar {
                         if (parts.length == 2) {
                             String terminalPart = parts[0].trim();
                             String productionPart = parts[1].trim();
-                            if(!p.containsKey(terminalPart)){
-                                p.put(terminalPart, new ArrayList<>());
-                                p.get(terminalPart).add(productionPart);
+                            if(!productions.containsKey(terminalPart)){
+                                productions.put(terminalPart, new ArrayList<>());
+                                productions.get(terminalPart).add(productionPart);
                             }
                             else
-                                p.get(terminalPart).add(productionPart);
+                                productions.get(terminalPart).add(productionPart);
                         }
                     }
                 }
@@ -73,7 +73,7 @@ public class Grammar {
     public List<List<String>> getProductionsForNonTerminal(String nonTerminal){
         List<List<String>> productions = new ArrayList<>();
         int i = 0;
-        for(String production: p.get(nonTerminal)){
+        for(String production: this.productions.get(nonTerminal)){
             productions.add(new ArrayList<>());
             String[] symbols = production.split(" ");
             productions.get(i).addAll(Arrays.asList(symbols));
@@ -83,8 +83,8 @@ public class Grammar {
     }
 
     public boolean checkContextFreeGrammar(){
-        for(String key: p.keySet()){
-            if(!n.contains(key)){
+        for(String key: productions.keySet()){
+            if(!nonTerminals.contains(key)){
                 return false;
             }
         }
@@ -93,10 +93,10 @@ public class Grammar {
 
     public static void main(String[] args){
         Grammar grammar = new Grammar("g2.txt");
-        System.out.println("Set of non-terminals: " + grammar.getN());
-        System.out.println("Set of terminals: " + grammar.getSigma());
-        System.out.println("Starting symbol: " + grammar.getS());
-        System.out.println("Productions: " + grammar.getP());
+        System.out.println("Set of non-terminals: " + grammar.getNonTerminals());
+        System.out.println("Set of terminals: " + grammar.getTerminals());
+        System.out.println("Starting symbol: " + grammar.getStartingSymbol());
+        System.out.println("Productions: " + grammar.getProductions());
         Scanner scanner = new Scanner(System.in);
         System.out.println("Give a non-terminal for which you want its productions: ");
         String givenNonTerminal = scanner.next();
