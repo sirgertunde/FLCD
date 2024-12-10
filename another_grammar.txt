@@ -1,0 +1,12 @@
+N = S A B C D
+sigma = a_+_*_(_)
+S = S
+P =
+    S -> B A
+    A -> + B A
+    A -> ε
+    B -> D C
+    C -> * D C
+    C -> ε
+    D -> ( S )
+    D -> a

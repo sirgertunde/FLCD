@@ -43,6 +43,9 @@ public class Parser {
                 boolean isEmpty = false;
                 for (List<String> production : productionsForNonTerminal) {
                     String firstSymbolFromProduction = production.getFirst();
+                    if(production.equals(List.of("ε")) || firstSymbolFromProduction.equals("ε")){
+                        tableFirst.get(nonTerminal).get(i).add("ε");
+                    }
                     if(grammar.getTerminals().contains(firstSymbolFromProduction) && !tableFirst.get(nonTerminal).get(i).contains(firstSymbolFromProduction)){
                         tableFirst.get(nonTerminal).get(i).add(firstSymbolFromProduction);
                     }
@@ -89,8 +92,8 @@ public class Parser {
             tableFollow.put(nonTerminal, new HashSet<>());
         }
 
-        // Mark with $ eoi, this is only used in the follow
-        tableFollow.get(grammar.getStartingSymbol()).add("$");
+        // Mark with ε eoi, this is only used in the follow
+        tableFollow.get(grammar.getStartingSymbol()).add("ε");
 
         boolean updated;
         do {
@@ -117,8 +120,10 @@ public class Parser {
                                 } else if (grammar.getNonTerminals().contains(nextSymbol)) {
 
                                     // Add the FIRST set of the next NT, unless it is ε (which it won't, i think, at least for our case)
-                                    for (String terminal : tableFirst.get(nextSymbol).get(0)) {
-                                        if (followSet.add(terminal)) {
+                                    for (String terminal : tableFirst.get(nextSymbol).getLast()) {
+                                        if (followSet.add(terminal) && !Objects.equals(terminal, "ε")) {
+                                            updated = true;
+                                        } else if (Objects.equals(terminal, "ε") && followSet.addAll(tableFollow.get(nonTerminal))) {
                                             updated = true;
                                         }
                                     }
@@ -137,7 +142,6 @@ public class Parser {
             }
         } while (updated);
 
-        // I hate java
     }
 
     public Map<String, Set<String>> getFirst(){
@@ -153,7 +157,7 @@ public class Parser {
     }
 
     public static void main(String[] args){
-        Grammar grammar = new Grammar("g2.txt");
+        Grammar grammar = new Grammar("g1.txt");
         Parser parser = new Parser(grammar);
 
         System.out.println("FIRST:\n");

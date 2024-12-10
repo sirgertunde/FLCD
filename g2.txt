@@ -31,8 +31,8 @@ P =
     structstmt -> cmpdstmt
     structstmt -> ifstmt
     structstmt -> whilestmt
-    structstmt -> forstsmt
-    ifstmt -> if condition then stmtlist
+    structstmt -> forstmt
+    ifstmt -> if condition then stmtlist fi
     ifstmt -> if condition then stmtlist else stmtlist fi
     whilestmt -> while condition do stmtlist done
     forstmt -> for IDENTIFIER in range ( expression ) do stmtlist done
