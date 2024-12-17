@@ -34,6 +34,17 @@ public class Grammar {
         return productions;
     }
 
+    public List<MyPair<String, String>> getListOfProductions(){
+        Map<String, List<String>> productions = getProductions();
+        List<MyPair<String, String>> listOfProductions = new ArrayList<>();
+        for(String key: productions.keySet()){
+            for(String value: productions.get(key)){
+                listOfProductions.add(new MyPair<>(key, value));
+            }
+        }
+        return listOfProductions;
+    }
+
     public void readFile(String fileName){
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
@@ -92,11 +103,12 @@ public class Grammar {
     }
 
     public static void main(String[] args){
-        Grammar grammar = new Grammar("g2.txt");
+        Grammar grammar = new Grammar("g1.txt");
         System.out.println("Set of non-terminals: " + grammar.getNonTerminals());
         System.out.println("Set of terminals: " + grammar.getTerminals());
         System.out.println("Starting symbol: " + grammar.getStartingSymbol());
         System.out.println("Productions: " + grammar.getProductions());
+        System.out.println("List of productions: " + grammar.getListOfProductions());
         Scanner scanner = new Scanner(System.in);
         System.out.println("Give a non-terminal for which you want its productions: ");
         String givenNonTerminal = scanner.next();

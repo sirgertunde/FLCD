@@ -1,7 +1,9 @@
 int main()
 begin
-	int n = input("Enter a number: ");
-	int maxDigit = 0;
+	int n;
+	int maxDigit;
+	n = input("Enter a number: ");
+	maxDigit = 0;
 	while n != 0
 	do
 	    if n % 10 > maxDigit then
@@ -10,5 +12,4 @@ begin
 		n = n // 10;
 	done
 	print(maxDigit);
-	return 0;
 end

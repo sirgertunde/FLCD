@@ -1,8 +1,11 @@
 int main()
 begin
-	int a = input("a= ");
-	int b = input("b= ");
-	int c = input("c= ");
+	int a;
+	int b;
+	int c;
+	a = input("a= ");
+	b = input("b= ");
+	c = input("c= ");
 	if a <= b and a <= c then
 		print(a);
 	fi
@@ -10,5 +13,4 @@ begin
 		print(b);
 	fi
 	print(c);
-	return 0;
 end

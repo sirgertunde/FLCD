@@ -36,7 +36,7 @@ public class MyScanner{
             String token = detect(program, index);
             index += token.length();
             if (reserved_words.contains(token) || operators.contains(token) || separators.contains(token)) {
-                pif.genPIF(codesForTokens.get(token), new MyPair<>(-1, -1));
+                pif.genPIF(token, codesForTokens.get(token), new MyPair<>(-1, -1));
             } else if (isIdentifier(token) || isConstant(token)) {
                 MyPair<Integer, Integer> position = symbolTable.get(token);
                 if(position == null)
@@ -45,9 +45,9 @@ public class MyScanner{
                     position = symbolTable.get(token);
                 }
                 if(isIdentifier(token))
-                    pif.genPIF(47, position);
+                    pif.genPIF(token, 47, position);
                 else if(isConstant(token))
-                    pif.genPIF(48, position);
+                    pif.genPIF(token,48, position);
             } else {
                 System.out.println("Lexical error on line " + lineNumber + ": Unrecognized token \"" + token + "\"");
                 lexicallyCorrect = false;
@@ -129,9 +129,9 @@ public class MyScanner{
             int numberOfLine = 1;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
-                if (numberOfLine < 26) {
+                if (numberOfLine < 24) {
                     reserved_words.add(line);
-                } else if (numberOfLine < 32) {
+                } else if (numberOfLine < 30) {
                     separators.add(line);
                 } else {
                     operators.add(line);
@@ -160,8 +160,8 @@ public class MyScanner{
 
     public void writePifToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("pif.out"))) {
-            for (MyPair<Integer, MyPair<Integer, Integer>> entry : pif.get()) {
-                writer.write(entry.getKey() + " " + entry.getValue());
+            for (MyPair<MyPair<String, Integer>, MyPair<Integer, Integer>> entry : pif.get()) {
+                writer.write(entry.getKey().getKey() + " " + entry.getKey().getValue() + " " + entry.getValue());
                 writer.newLine();
             }
         } catch (IOException e) {

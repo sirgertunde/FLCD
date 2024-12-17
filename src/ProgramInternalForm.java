@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProgramInternalForm {
-    private final List<MyPair<Integer, MyPair<Integer, Integer>>> pif;
+    private final List<MyPair<MyPair<String, Integer>, MyPair<Integer, Integer>>> pif;
 
     public ProgramInternalForm() {
         this.pif = new ArrayList<>();
     }
 
-    public List<MyPair<Integer, MyPair<Integer, Integer>>> get(){
+    public List<MyPair<MyPair<String, Integer>, MyPair<Integer, Integer>>> get(){
         return pif;
     }
 
-    public void genPIF(Integer token, MyPair<Integer, Integer> position) {
-        pif.add(new MyPair<>(token, position));
+    public void genPIF(String token, Integer tokenCode, MyPair<Integer, Integer> position) {
+        pif.add(new MyPair<>(new MyPair<>(token, tokenCode), position));
     }
 
     @Override

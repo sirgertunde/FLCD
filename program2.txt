@@ -1,13 +1,12 @@
 int main()
 begin
-	int i, n;
-	n = input("n= ");
-	int a[n];
-	int product = 1;
-	for i in range(n) do
+	int i;
+	int a[10];
+	int product;
+	product = 1;
+	for i in range(10) do
 		a[i] = input();
 		product = product * a[i];
 	done
 	print(product);
-	return 0;
 end

@@ -14,7 +14,6 @@ input
 print
 string
 boolean
-return
 true
 false
 in
@@ -22,7 +21,6 @@ range
 char
 and
 or
-sqrt
 ;
 (
 )

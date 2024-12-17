@@ -1,34 +1,36 @@
-N = program decllist declaration type arraydecl stmtlist stmt simplstmt assignstmt expression term factor iostmt structstmt ifstmt whilestmt forstmt condition relation
-sigma = int_main()_begin_;_return_end_IDENTIFIER_boolean_char_string_NUMBER_STRING_[_]_=_+_-_//_/_%_*_(_)_input_print_if_then_else_fi_while_do_done_for_in range_,_<_<=_=_<>_>=_>_and_or
+N = program decllist decllistFollowing declaration type arraydecl stmtlist stmtlistFollowing stmt simplstmt assignstmt expression term factor iostmt structstmt ifstmt whilestmt forstmt condition relation
+sigma = int_main()_begin_;_end_IDENTIFIER_boolean_char_string_NUMBER_STRING_[_]_=_+_-_//_/_%_*_(_)_input_print_if_then_else_fi_while_do_done_for_in range_,_<_<=_=_!=_>=_>_and_or
 S = program
 P =
-    program -> int main() begin decllist ; stmtlist return 0 ; end
-    decllist -> declaration
-    decllist -> declaration ; decllist
-    declaration -> type IDENTIFIER ;
+    program -> int main() begin decllist ; stmtlist end
+    decllist -> declaration ; decllistFollowing
+    decllistFollowing -> ε
+    decllistFollowing -> decllist
+    declaration -> type IDENTIFIER
     declaration -> arraydecl
     type -> int
     type -> boolean
     type -> string
     type -> char
-    arraydecl -> int IDENTIFIER [ NUMBER ] ;
-    stmtlist -> stmt
-    stmtlist -> stmt ; stmtlist
+    arraydecl -> int IDENTIFIER [ NUMBER ]
+    stmtlist -> stmt stmtlistFollowing
+    stmtlistFollowing -> ε
+    stmtlistFollowing -> stmtlist
     stmt -> simplstmt
     stmt -> structstmt
     simplstmt -> assignstmt
     simplstmt -> iostmt
-    assignstmt -> IDENTIFIER = expression
+    assignstmt -> IDENTIFIER = expression ;
     expression -> term
     expression -> term + expression
     term -> factor
     term -> factor * term
     factor -> ( expression )
     factor -> IDENTIFIER
-    iostmt -> input ( STRING )
-    iostmt -> print ( IDENTIFIER )
-    iostmt -> print ( STRING )
-    structstmt -> cmpdstmt
+    factor -> NUMBER
+    iostmt -> input ( STRING ) ;
+    iostmt -> print ( IDENTIFIER ) ;
+    iostmt -> print ( STRING ) ;
     structstmt -> ifstmt
     structstmt -> whilestmt
     structstmt -> forstmt
@@ -38,10 +40,11 @@ P =
     forstmt -> for IDENTIFIER in range ( expression ) do stmtlist done
     forstmt -> for IDENTIFIER in range ( expression , expression ) do stmtlist done
     condition -> expression relation expression
+    condition -> condition relation condition
     relation -> <
     relation -> <=
     relation -> ==
-    relation -> <>
+    relation -> !=
     relation -> >=
     relation -> >
     relation -> and
