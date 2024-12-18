@@ -167,33 +167,38 @@ public class Parser {
         List<MyPair<String, String>> listOfProductions = grammar.getListOfProductions();
         for(String nonTerminal: grammar.getNonTerminals()){
             for (String production: grammar.getProductions().get(nonTerminal)){
-                String firstSymbol = String.valueOf(production.charAt(0));
+                String[] symbolsFromProduction = production.split(" ");
+                String firstSymbol = Arrays.stream(symbolsFromProduction).toList().getFirst();
                 if(grammar.getTerminals().contains(firstSymbol)){
-                    if(parsingTable.put(new MyPair<>(nonTerminal, firstSymbol), new MyPair<>(production, listOfProductions.indexOf(new MyPair<>(nonTerminal, production)))) != null){
-                        throw new RuntimeException("not of type ll1, cell " + nonTerminal + " " + firstSymbol);
+                    MyPair<String, Integer> p = parsingTable.put(new MyPair<>(nonTerminal, firstSymbol), new MyPair<>(production, listOfProductions.indexOf(new MyPair<>(nonTerminal, production))));
+                    if(p != null){
+                        throw new RuntimeException("not of type ll1, cell " + nonTerminal + " " + firstSymbol + " there was " + p + " not i want " + new MyPair<>(production, listOfProductions.indexOf(new MyPair<>(nonTerminal, production))));
                     }
                 }
                 if(firstSymbol.equals("ε")){
                     Set<String> follow = getFollow().get(nonTerminal);
                     for(String symbol: follow){
-                        if(parsingTable.put(new MyPair<>(nonTerminal, symbol), new MyPair<>(production, listOfProductions.indexOf(new MyPair<>(nonTerminal, production)))) != null){
-                            throw new RuntimeException("not of type ll1, cell " + nonTerminal + " " + symbol);
+                        MyPair<String, Integer> p = parsingTable.put(new MyPair<>(nonTerminal, symbol), new MyPair<>(production, listOfProductions.indexOf(new MyPair<>(nonTerminal, production))));
+                        if(p != null){
+                            throw new RuntimeException("not of type ll1, cell " + nonTerminal + " " + symbol + " there was " + p + " not i want " + new MyPair<>(production, listOfProductions.indexOf(new MyPair<>(nonTerminal, production))));
                         }
                     }
                 }
                 if(grammar.getNonTerminals().contains(firstSymbol)){
-                    Set<String> first = getFirst().get(nonTerminal);
+                    Set<String> first = getFirst().get(firstSymbol);
                     for(String symbol: first){
                         if(grammar.getTerminals().contains(symbol)){
-                            if(parsingTable.put(new MyPair<>(nonTerminal, symbol), new MyPair<>(production, listOfProductions.indexOf(new MyPair<>(nonTerminal, production)))) != null){
-                                throw new RuntimeException("not of type ll1, cell " + nonTerminal + " " + symbol);
+                            MyPair<String, Integer> p = parsingTable.put(new MyPair<>(nonTerminal, symbol), new MyPair<>(production, listOfProductions.indexOf(new MyPair<>(nonTerminal, production))));
+                            if(p != null){
+                                throw new RuntimeException("not of type ll1, cell " + nonTerminal + " " + symbol + " there was " + p + " now i want " + new MyPair<>(production, listOfProductions.indexOf(new MyPair<>(nonTerminal, production))));
                             }
                         }
                         if(symbol.equals("ε")){
                             Set<String> follow = getFollow().get(nonTerminal);
                             for(String symbolInFollow: follow){
-                                if(parsingTable.put(new MyPair<>(nonTerminal, symbolInFollow), new MyPair<>(production, listOfProductions.indexOf(new MyPair<>(nonTerminal, production)))) != null){
-                                    throw new RuntimeException("not of type ll1, cell " + nonTerminal + " " + symbolInFollow);
+                                MyPair<String, Integer> p = parsingTable.put(new MyPair<>(nonTerminal, symbolInFollow), new MyPair<>(production, listOfProductions.indexOf(new MyPair<>(nonTerminal, production))));
+                                if(p != null){
+                                    throw new RuntimeException("not of type ll1, cell " + nonTerminal + " " + symbolInFollow + " there was " + p + " not i want " + new MyPair<>(production, listOfProductions.indexOf(new MyPair<>(nonTerminal, production))));
                                 }
                             }
                         }
@@ -217,12 +222,24 @@ public class Parser {
             boolean go = true;
             String result = "";
             while(go){
-                if(inputStack.empty() && !workStack.empty()){
-                    while(!workStack.empty()){
-                        outputBand.add(grammar.getListOfProductions().indexOf(new MyPair<>(workStack.peek(), "ε")));
-                        workStack.pop();
-                    }
+                if (workStack.isEmpty() && !inputStack.isEmpty()) {
+                    result = "error";
+                    break;
+                }
+                if (inputStack.isEmpty() && workStack.isEmpty()) {
                     result = "accept";
+                    break;
+                }
+                if (inputStack.isEmpty() && !workStack.isEmpty()) {
+                    if (grammar.getNonTerminals().contains(workStack.peek())) {
+                        MyPair<String, Integer> epsilonProduction = parsingTable.get(new MyPair<>(workStack.peek(), "ε"));
+                        if (epsilonProduction != null) {
+                            workStack.pop();
+                            outputBand.add(epsilonProduction.getValue());
+                            continue;
+                        }
+                    }
+                    result = "error";
                     break;
                 }
 
@@ -252,6 +269,98 @@ public class Parser {
                     result = "error";
                 }
             }
+            ParserOutput parserOutput = new ParserOutput(grammar, outputBand);
+            parserOutput.generateTree();
+            parserOutput.printTree();
+            if(result.equals("accept")){
+                System.out.println("Sequence accepted");
+                System.out.println(outputBand);
+            }else {
+                System.out.println("Sequence not accepted, syntax error at " + inputStack.peek());
+            }
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void parseMiniLanguage(String fileName, MyScanner scanner){
+        try(BufferedReader reader = new BufferedReader(new FileReader(fileName))){
+            Stack<String> inputStack = new Stack<>();
+            Stack<String> workStack = new Stack<>();
+            workStack.push(grammar.getStartingSymbol());
+            Queue<Integer> outputBand = new LinkedList<>();
+            List<String> tokens = new ArrayList<>();
+            String line;
+            while ((line = reader.readLine()) != null){
+                String[] lineParts = line.split(" ");
+                tokens.add(Arrays.stream(lineParts).toList().getFirst());
+            }
+            for(int i = tokens.size() - 1; i >= 0; i--){
+                inputStack.push(tokens.get(i));
+            }
+            System.out.println("INPUT STACK: " + inputStack);
+            boolean go = true;
+            String result = "";
+            while (go) {
+                if (workStack.isEmpty() && !inputStack.isEmpty()) {
+                    result = "error";
+                    break;
+                }
+                if (inputStack.isEmpty() && workStack.isEmpty()) {
+                    result = "accept";
+                    break;
+                }
+                if (inputStack.isEmpty() && !workStack.isEmpty()) {
+                    if (grammar.getNonTerminals().contains(workStack.peek())) {
+                        MyPair<String, Integer> epsilonProduction = parsingTable.get(new MyPair<>(workStack.peek(), "ε"));
+                        if (epsilonProduction != null) {
+                            workStack.pop();
+                            outputBand.add(epsilonProduction.getValue());
+                            continue;
+                        }
+                    }
+                    result = "error";
+                    break;
+                }
+                HashTable<String> symbolTable = scanner.getSymbolTable();
+                MyPair<String, Integer> cellContent = parsingTable.get(new MyPair<>(workStack.peek(), inputStack.peek()));
+                if(Objects.equals(workStack.peek(), "IDENTIFIER") || Objects.equals(workStack.peek(), "NUMBER") || Objects.equals(workStack.peek(), "STRING") && symbolTable.get(inputStack.peek()) != null){
+                    parsingTable.put(new MyPair<>(inputStack.peek(), inputStack.peek()), null);
+                    cellContent = parsingTable.get(new MyPair<>(inputStack.peek(), inputStack.peek()));
+                    workStack.pop();
+                    workStack.push(inputStack.peek());
+                }
+                System.out.println(inputStack.peek());
+                System.out.println(workStack.peek());
+                System.out.println("CELL:" + workStack.peek() + ", " + inputStack.peek() + " CONTENT: " + cellContent);
+                if(cellContent != null){
+                    if(Objects.equals(cellContent.getKey(), "ε")){
+                        workStack.pop();
+                        outputBand.add(cellContent.getValue());
+                    }else{
+                        workStack.pop();
+                        String[] splitArray = cellContent.getKey().split(" ");
+                        List<String> splitCellContent = Arrays.asList(splitArray);
+                        Collections.reverse(splitCellContent);
+                        for(String symbol: splitCellContent){
+                            workStack.push(symbol);
+                        }
+                        outputBand.add(cellContent.getValue());
+                    }
+                } else if(Objects.equals(inputStack.peek(), workStack.peek()) && grammar.getTerminals().contains(workStack.peek())) {
+                    inputStack.pop();
+                    workStack.pop();
+                } else if (Objects.equals(inputStack.peek(), workStack.peek()) && Objects.equals(inputStack.peek(), "$")) {
+                    go = false;
+                    result = "accept";
+                } else if (Objects.equals(inputStack.peek(), workStack.peek()) && symbolTable.get(workStack.peek()) != null) {
+                    inputStack.pop();
+                    workStack.pop();
+                } else {
+                    go = false;
+                    result = "error";
+                }
+            }
             if(result.equals("accept")){
                 System.out.println("Sequence accepted");
                 System.out.println(outputBand);
@@ -264,6 +373,10 @@ public class Parser {
     }
 
     public static void main(String[] args){
+        MyScanner myScanner = new MyScanner();
+        String fileContent = myScanner.readProgramFromFile("program1.txt");
+        if(fileContent != null)
+            myScanner.scan(fileContent);
         Grammar grammar = new Grammar("g1.txt");
         Parser parser = new Parser(grammar);
 
@@ -277,5 +390,6 @@ public class Parser {
         System.out.println(grammar.getListOfProductions());
         System.out.println(parser.parsingTable);
         parser.parseSimpleGrammar("seq.txt");
+        //parser.parseMiniLanguage("pif.out", myScanner);
     }
 }

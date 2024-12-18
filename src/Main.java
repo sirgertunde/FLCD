@@ -10,5 +10,6 @@ public class Main {
             System.out.println("Lexically correct");
         myScanner.writePifToFile();
         myScanner.writeToSymbolTableFile();
+        System.out.println(myScanner.getSymbolTable().getKeys());
     }
 }

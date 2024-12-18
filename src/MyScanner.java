@@ -14,6 +14,10 @@ public class MyScanner{
     private boolean lexicallyCorrect = true;
     private int lineNumber = 1;
 
+    public HashTable<String> getSymbolTable() {
+        return symbolTable;
+    }
+
     public MyScanner() {
         this.symbolTable = new HashTable<>();
         this.pif = new ProgramInternalForm();
