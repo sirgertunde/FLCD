@@ -1,5 +1,8 @@
 package src;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class ParserOutput
@@ -7,11 +10,13 @@ public class ParserOutput
     private final Grammar grammar;
     private final Queue<Integer> outputBand;
     private Node root;
+    private String filePath;
 
-    public ParserOutput(Grammar grammar, Queue<Integer> outputBand)
+    public ParserOutput(Grammar grammar, Queue<Integer> outputBand, String filePath)
     {
         this.grammar = grammar;
         this.outputBand = outputBand;
+        this.filePath = filePath;
     }
 
     public void generateTree()
@@ -67,7 +72,16 @@ public class ParserOutput
         if (root != null)
         {
             System.out.println("Tree representation:\n");
-            root.printNodeRecursive("", true, true);
+            String output = root.printNodeRecursive("", true, true);
+            System.out.println(output);
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath)))
+            {
+                writer.write(output);
+            } catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
         } else
         {
             System.out.println("Tree is empty. Generate the tree first.");

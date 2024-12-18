@@ -269,7 +269,7 @@ public class Parser {
                     result = "error";
                 }
             }
-            ParserOutput parserOutput = new ParserOutput(grammar, outputBand);
+            ParserOutput parserOutput = new ParserOutput(grammar, outputBand, "tree.txt");
             parserOutput.generateTree();
             parserOutput.printTree();
             if(result.equals("accept")){

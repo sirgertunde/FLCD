@@ -5,6 +5,7 @@ import java.util.*;
 class Node {
     String name;
     List<Node> children;
+    static String output = "";
 
     public Node(String name) {
         this.name = name;
@@ -15,12 +16,14 @@ class Node {
         this.children.add(child);
     }
 
-    public void printNodeRecursive(String indent, boolean last, boolean first) {
-        System.out.println(indent + (first ? "" : (last ? "└── " : "├── ")) + name);
+    public String printNodeRecursive(String indent, boolean last, boolean first) {
+        output += indent + (first ? "" : (last ? "└── " : "├── ")) + name + "\n";
         indent += first ? "" : (last ? "    " : "│   ");
 
         for (int i = 0; i < children.size(); i++) {
             children.get(i).printNodeRecursive(indent, i == children.size() - 1, false);
         }
+
+        return output;
     }
 }
