@@ -3,9 +3,9 @@ begin
 	int a;
 	int b;
 	int c;
-	a = input("a= ");
-	b = input("b= ");
-	c = input("c= ");
+	a = input("a=");
+	b = input("b=");
+	c = input("c=");
 	if a <= b and a <= c then
 		print(a);
 	fi

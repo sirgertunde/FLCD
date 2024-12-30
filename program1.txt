@@ -2,7 +2,7 @@ int main()
 begin
 	int n;
 	int maxDigit;
-	n = input("Enter a number: ");
+	n = input("n=");
 	maxDigit = 0;
 	while n != 0
 	do

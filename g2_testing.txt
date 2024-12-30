@@ -1,0 +1,37 @@
+N = program decllist declaration type declarationFollowing stmtlist stmtlistFollowing stmt simplstmt assignstmt assignstmtFollowing expression expressionFollowing term iostmt inputstmt printstmt printstmtFollowing
+sigma = int_main_(_)_begin_;_end_IDENTIFIER_boolean_char_string_NUMBER_STRING_[_]_=_+_-_//_/_%_*_(_)_input_print_if_then_else_fi_while_do_done_for_in_range_,_<_<=_==_!=_>=_>_and_or
+S = program
+P =
+    program -> int main ( ) begin decllist stmtlist end
+    decllist -> declaration ; decllist
+    decllist -> ε
+    declaration -> type IDENTIFIER declarationFollowing
+    declarationFollowing -> ε
+    declarationFollowing -> [ NUMBER ]
+    type -> int
+    type -> boolean
+    type -> string
+    type -> char
+    stmtlist -> stmt stmtlistFollowing
+    stmtlistFollowing -> ε
+    stmtlistFollowing -> stmtlist
+    stmt -> simplstmt
+    simplstmt -> assignstmt
+    simplstmt -> iostmt
+    assignstmt -> IDENTIFIER = assignstmtFollowing
+    assignstmtFollowing -> expression ;
+    assignstmtFollowing -> inputstmt
+    expression -> term expressionFollowing
+    expressionFollowing -> % term
+    expressionFollowing -> + term
+    expressionFollowing -> - term
+    expressionFollowing -> // term
+    expressionFollowing -> * term
+    term -> IDENTIFIER
+    term -> NUMBER
+    iostmt -> inputstmt
+    iostmt -> printstmt
+    inputstmt -> input ( STRING ) ;
+    printstmt -> print ( printstmtFollowing ) ;
+    printstmtFollowing -> IDENTIFIER
+    printstmtFollowing -> STRING

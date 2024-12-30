@@ -298,7 +298,6 @@ public class Parser {
             for(int i = tokens.size() - 1; i >= 0; i--){
                 inputStack.push(tokens.get(i));
             }
-            System.out.println("INPUT STACK: " + inputStack);
             boolean go = true;
             String result = "";
             while (go) {
@@ -330,9 +329,17 @@ public class Parser {
                     workStack.pop();
                     workStack.push(inputStack.peek());
                 }
-                System.out.println(inputStack.peek());
-                System.out.println(workStack.peek());
-                System.out.println("CELL:" + workStack.peek() + ", " + inputStack.peek() + " CONTENT: " + cellContent);
+
+                if(!grammar.getTerminals().contains(inputStack.peek()) && scanner.isIdentifier(inputStack.peek())){
+                    cellContent = parsingTable.get(new MyPair<>(workStack.peek(), "IDENTIFIER"));
+                }
+                if(!grammar.getTerminals().contains(inputStack.peek()) && scanner.isNumericalConstant(inputStack.peek())){
+                    cellContent = parsingTable.get(new MyPair<>(workStack.peek(), "NUMBER"));
+                }
+                if(!grammar.getTerminals().contains(inputStack.peek()) && scanner.isStringConstant(inputStack.peek())){
+                    cellContent = parsingTable.get(new MyPair<>(workStack.peek(), "STRING"));
+                }
+
                 if(cellContent != null){
                     if(Objects.equals(cellContent.getKey(), "ε")){
                         workStack.pop();
@@ -356,14 +363,18 @@ public class Parser {
                 } else if (Objects.equals(inputStack.peek(), workStack.peek()) && symbolTable.get(workStack.peek()) != null) {
                     inputStack.pop();
                     workStack.pop();
-                } else {
+                }
+                else {
                     go = false;
                     result = "error";
                 }
             }
+            ParserOutput parserOutput = new ParserOutput(grammar, outputBand, "tree.txt");
+            parserOutput.generateTree();
+            parserOutput.printTree();
+
             if(result.equals("accept")){
                 System.out.println("Sequence accepted");
-                System.out.println(outputBand);
             }else {
                 System.out.println("Sequence not accepted, syntax error at " + inputStack.peek());
             }
@@ -377,8 +388,13 @@ public class Parser {
         String fileContent = myScanner.readProgramFromFile("program1.txt");
         if(fileContent != null)
             myScanner.scan(fileContent);
-        Grammar grammar = new Grammar("g1.txt");
+        Grammar grammar = new Grammar("g2.txt");
         Parser parser = new Parser(grammar);
+
+        if(myScanner.getLexicallyCorrect())
+            System.out.println("Lexically correct");
+        myScanner.writePifToFile();
+        myScanner.writeToSymbolTableFile();
 
         System.out.println("FIRST:\n");
         System.out.println(parser.getFirst());
@@ -387,9 +403,7 @@ public class Parser {
         for (Map.Entry<String, Set<String>> entry : parser.getFollow().entrySet()) {
             System.out.println(entry.getKey() + " : " + entry.getValue());
         }
-        System.out.println(grammar.getListOfProductions());
-        System.out.println(parser.parsingTable);
-        parser.parseSimpleGrammar("seq.txt");
-        //parser.parseMiniLanguage("pif.out", myScanner);
+        //parser.parseSimpleGrammar("seq.txt");
+        parser.parseMiniLanguage("pif.out", myScanner);
     }
 }

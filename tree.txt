@@ -1,0 +1,172 @@
+program
+├── end
+├── stmtlist
+│   ├── stmtlistFollowing
+│   │   └── stmtlist
+│   │       ├── stmtlistFollowing
+│   │       │   └── stmtlist
+│   │       │       ├── stmtlistFollowing
+│   │       │       │   └── stmtlist
+│   │       │       │       ├── stmtlistFollowing
+│   │       │       │       │   └── ε
+│   │       │       │       └── stmt
+│   │       │       │           └── simplstmt
+│   │       │       │               └── iostmt
+│   │       │       │                   └── printstmt
+│   │       │       │                       ├── ;
+│   │       │       │                       ├── )
+│   │       │       │                       ├── printstmtFollowing
+│   │       │       │                       │   └── IDENTIFIER
+│   │       │       │                       ├── (
+│   │       │       │                       └── print
+│   │       │       └── stmt
+│   │       │           └── structstmt
+│   │       │               └── whilestmt
+│   │       │                   ├── done
+│   │       │                   ├── stmtlist
+│   │       │                   │   ├── stmtlistFollowing
+│   │       │                   │   │   └── stmtlist
+│   │       │                   │   │       ├── stmtlistFollowing
+│   │       │                   │   │       │   └── ε
+│   │       │                   │   │       └── stmt
+│   │       │                   │   │           └── simplstmt
+│   │       │                   │   │               └── assignstmt
+│   │       │                   │   │                   ├── assignstmtFollowing
+│   │       │                   │   │                   │   ├── ;
+│   │       │                   │   │                   │   └── expression
+│   │       │                   │   │                   │       ├── expressionFollowing
+│   │       │                   │   │                   │       │   ├── term
+│   │       │                   │   │                   │       │   │   └── NUMBER
+│   │       │                   │   │                   │       │   └── //
+│   │       │                   │   │                   │       └── term
+│   │       │                   │   │                   │           ├── termFollowing
+│   │       │                   │   │                   │           │   └── ε
+│   │       │                   │   │                   │           └── IDENTIFIER
+│   │       │                   │   │                   ├── =
+│   │       │                   │   │                   └── term
+│   │       │                   │   │                       ├── termFollowing
+│   │       │                   │   │                       │   └── ε
+│   │       │                   │   │                       └── IDENTIFIER
+│   │       │                   │   └── stmt
+│   │       │                   │       └── structstmt
+│   │       │                   │           └── ifstmt
+│   │       │                   │               ├── ifstmtFollowing
+│   │       │                   │               │   └── fi
+│   │       │                   │               ├── stmtlist
+│   │       │                   │               │   ├── stmtlistFollowing
+│   │       │                   │               │   │   └── ε
+│   │       │                   │               │   └── stmt
+│   │       │                   │               │       └── simplstmt
+│   │       │                   │               │           └── assignstmt
+│   │       │                   │               │               ├── assignstmtFollowing
+│   │       │                   │               │               │   ├── ;
+│   │       │                   │               │               │   └── expression
+│   │       │                   │               │               │       ├── expressionFollowing
+│   │       │                   │               │               │       │   ├── term
+│   │       │                   │               │               │       │   │   └── NUMBER
+│   │       │                   │               │               │       │   └── %
+│   │       │                   │               │               │       └── term
+│   │       │                   │               │               │           ├── termFollowing
+│   │       │                   │               │               │           │   └── ε
+│   │       │                   │               │               │           └── IDENTIFIER
+│   │       │                   │               │               ├── =
+│   │       │                   │               │               └── term
+│   │       │                   │               │                   ├── termFollowing
+│   │       │                   │               │                   │   └── ε
+│   │       │                   │               │                   └── IDENTIFIER
+│   │       │                   │               ├── then
+│   │       │                   │               ├── condition
+│   │       │                   │               │   ├── conditionFollowing
+│   │       │                   │               │   │   └── ε
+│   │       │                   │               │   ├── expression
+│   │       │                   │               │   │   ├── expressionFollowing
+│   │       │                   │               │   │   │   └── ε
+│   │       │                   │               │   │   └── term
+│   │       │                   │               │   │       ├── termFollowing
+│   │       │                   │               │   │       │   └── ε
+│   │       │                   │               │   │       └── IDENTIFIER
+│   │       │                   │               │   ├── relation
+│   │       │                   │               │   │   └── >
+│   │       │                   │               │   └── expression
+│   │       │                   │               │       ├── expressionFollowing
+│   │       │                   │               │       │   ├── term
+│   │       │                   │               │       │   │   └── NUMBER
+│   │       │                   │               │       │   └── %
+│   │       │                   │               │       └── term
+│   │       │                   │               │           ├── termFollowing
+│   │       │                   │               │           │   └── ε
+│   │       │                   │               │           └── IDENTIFIER
+│   │       │                   │               └── if
+│   │       │                   ├── do
+│   │       │                   ├── condition
+│   │       │                   │   ├── conditionFollowing
+│   │       │                   │   │   └── ε
+│   │       │                   │   ├── expression
+│   │       │                   │   │   ├── expressionFollowing
+│   │       │                   │   │   │   └── ε
+│   │       │                   │   │   └── term
+│   │       │                   │   │       └── NUMBER
+│   │       │                   │   ├── relation
+│   │       │                   │   │   └── !=
+│   │       │                   │   └── expression
+│   │       │                   │       ├── expressionFollowing
+│   │       │                   │       │   └── ε
+│   │       │                   │       └── term
+│   │       │                   │           ├── termFollowing
+│   │       │                   │           │   └── ε
+│   │       │                   │           └── IDENTIFIER
+│   │       │                   └── while
+│   │       └── stmt
+│   │           └── simplstmt
+│   │               └── assignstmt
+│   │                   ├── assignstmtFollowing
+│   │                   │   ├── ;
+│   │                   │   └── expression
+│   │                   │       ├── expressionFollowing
+│   │                   │       │   └── ε
+│   │                   │       └── term
+│   │                   │           └── NUMBER
+│   │                   ├── =
+│   │                   └── term
+│   │                       ├── termFollowing
+│   │                       │   └── ε
+│   │                       └── IDENTIFIER
+│   └── stmt
+│       └── simplstmt
+│           └── assignstmt
+│               ├── assignstmtFollowing
+│               │   └── inputstmt
+│               │       ├── inputstmtFollowing
+│               │       │   ├── ;
+│               │       │   ├── )
+│               │       │   └── STRING
+│               │       ├── (
+│               │       └── input
+│               ├── =
+│               └── term
+│                   ├── termFollowing
+│                   │   └── ε
+│                   └── IDENTIFIER
+├── decllist
+│   ├── decllist
+│   │   ├── decllist
+│   │   │   └── ε
+│   │   ├── ;
+│   │   └── declaration
+│   │       ├── declarationFollowing
+│   │       │   └── ε
+│   │       ├── IDENTIFIER
+│   │       └── type
+│   │           └── int
+│   ├── ;
+│   └── declaration
+│       ├── declarationFollowing
+│       │   └── ε
+│       ├── IDENTIFIER
+│       └── type
+│           └── int
+├── begin
+├── )
+├── (
+├── main
+└── int

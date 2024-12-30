@@ -1,11 +1,10 @@
-N = program decllist decllistFollowing declaration type declarationFollowing stmtlist stmtlistFollowing stmt simplstmt assignstmt assignstmtFollowing expression expressionFollowing term iostmt inputstmt printstmt printstmtFollowing structstmt ifstmt ifstmtFollowing whilestmt forstmt forstmtFollowing condition conditionFollowing relation
+N = program decllist declaration type declarationFollowing stmtlist stmtlistFollowing stmt simplstmt assignstmt assignstmtFollowing expression expressionFollowing term termFollowing iostmt inputstmt inputstmtFollowing printstmt printstmtFollowing structstmt ifstmt ifstmtFollowing whilestmt forstmt forstmtFollowing condition conditionFollowing relation
 sigma = int_main_(_)_begin_;_end_IDENTIFIER_boolean_char_string_NUMBER_STRING_[_]_=_+_-_//_/_%_*_(_)_input_print_if_then_else_fi_while_do_done_for_in_range_,_<_<=_==_!=_>=_>_and_or
 S = program
 P =
-    program -> int main ( ) begin decllist ; stmtlist end
-    decllist -> declaration ; decllistFollowing
-    decllistFollowing -> decllist
-    decllistFollowing -> ε
+    program -> int main ( ) begin decllist stmtlist end
+    decllist -> declaration ; decllist
+    decllist -> ε
     declaration -> type IDENTIFIER declarationFollowing
     declarationFollowing -> ε
     declarationFollowing -> [ NUMBER ]
@@ -14,26 +13,31 @@ P =
     type -> string
     type -> char
     stmtlist -> stmt stmtlistFollowing
-    stmtlistFollowing -> stmtlist
     stmtlistFollowing -> ε
+    stmtlistFollowing -> stmtlist
     stmt -> simplstmt
     stmt -> structstmt
     simplstmt -> assignstmt
     simplstmt -> iostmt
-    assignstmt -> IDENTIFIER = assignstmtFollowing
+    assignstmt -> term = assignstmtFollowing
     assignstmtFollowing -> expression ;
-    assignstmtFollowing -> inputstmt ;
+    assignstmtFollowing -> inputstmt
     expression -> term expressionFollowing
+    expressionFollowing -> ε
     expressionFollowing -> % term
     expressionFollowing -> + term
     expressionFollowing -> - term
     expressionFollowing -> // term
     expressionFollowing -> * term
-    term -> IDENTIFIER
+    term -> IDENTIFIER termFollowing
     term -> NUMBER
+    termFollowing -> ε
+    termFollowing -> [ IDENTIFIER ]
     iostmt -> inputstmt
     iostmt -> printstmt
-    inputstmt -> input ( STRING ) ;
+    inputstmt -> input ( inputstmtFollowing
+    inputstmtFollowing -> STRING ) ;
+    inputstmtFollowing -> ) ;
     printstmt -> print ( printstmtFollowing ) ;
     printstmtFollowing -> IDENTIFIER
     printstmtFollowing -> STRING

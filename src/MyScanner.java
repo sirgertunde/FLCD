@@ -59,7 +59,7 @@ public class MyScanner{
         }
     }
 
-    private String detect(String program, int startIndex) {
+    public String detect(String program, int startIndex) {
         StringBuilder token = new StringBuilder();
         char ch = program.charAt(startIndex);
         if (ch == '"') {
@@ -113,18 +113,28 @@ public class MyScanner{
     }
 
 
-    private boolean isIdentifier(String token) {
+    public boolean isIdentifier(String token) {
         FiniteAutomata faForIdentifiers = new FiniteAutomata("fa_for_identifiers.in");
         return faForIdentifiers.isAccepted(token);
         //return Character.isLetter(token.charAt(0)) && token.chars().allMatch(Character::isLetterOrDigit);
     }
 
-    private boolean isConstant(String token) {
+    public boolean isConstant(String token) {
         FiniteAutomata faForStringConstants = new FiniteAutomata("fa_for_string_constants.in");
         FiniteAutomata faForNumericConstants = new FiniteAutomata("fa_for_numeric_constants.in");
         return faForStringConstants.isAccepted(token) || faForNumericConstants.isAccepted(token) || (token.startsWith("'") && token.length() == 3 && token.endsWith("'"));
 //        return token.matches("[1-9]+[0-9]*") || token.equals("0") || (token.startsWith("\"") && token.endsWith("\"")) ||
 //                (token.startsWith("'") && token.length() == 3 && token.endsWith("'"));
+    }
+
+    public boolean isStringConstant(String token){
+        FiniteAutomata faForStringConstants = new FiniteAutomata("fa_for_string_constants.in");
+        return faForStringConstants.isAccepted(token);
+    }
+
+    public boolean isNumericalConstant(String token){
+        FiniteAutomata faForNumericalConstants = new FiniteAutomata("fa_for_numeric_constants.in");
+        return faForNumericalConstants.isAccepted(token);
     }
 
     public void loadTokens() {
